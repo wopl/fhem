@@ -1,0 +1,12 @@
+# Created by FHEMWEB, 2013-06-27 17:52:16
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title "Betriebsstunden Verdichter (f4)"
+set ylabel "Verdichter"
+
+#FileLog 11:Eisf.UVR1611\x3a:14:
+
+plot "<IN>" using 1:2 axes x1y1 title 'Verdichter [h]' ls l0 lw 1.5 with lines

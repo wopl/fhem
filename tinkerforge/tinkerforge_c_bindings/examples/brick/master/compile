@@ -1,0 +1,2 @@
+#!/bin/bash
+gcc -pthread -o exss ./ip_connection.c ./brick_master.c example_stack_status.c

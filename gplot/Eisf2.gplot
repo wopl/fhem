@@ -1,0 +1,15 @@
+# Created by FHEMWEB, 2013-06-27 17:52:16
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title "Betriebsstunden Wärmequelle Kollektor/Zusatzheizung (f2)"
+set ylabel "Kollektor"
+set y2label "Zusatzheizung"
+
+#FileLog 8:Eisf.UVR1611\x3a:14:
+#FileLog 12:Eisf.UVR1611\x3a:14:
+
+plot "<IN>" using 1:2 axes x1y1 title 'Kollektor [h]' ls l0 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y2 title 'Zusatzheizung [h]' ls l3 lw 1.5 with lines

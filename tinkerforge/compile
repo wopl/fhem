@@ -1,0 +1,2 @@
+#!/bin/bash
+gcc -pthread -o tf_fenster ./tinkerforge_c_bindings/bindings/ip_connection.c ./tinkerforge_c_bindings/bindings/bricklet_io16.c tf_fenster.c

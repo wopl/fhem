@@ -1,0 +1,23 @@
+# Created by FHEMWEB, 2013-06-27 17:52:16
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title "Eisheizung Ein-/Ausgänge (f1)"
+set ytics 
+set y2tics "Aus" 0.1, "Ein" 0.3, "Aus" 0.4, "Ein" 0.6
+set grid ytics
+set ylabel "Temperatur"
+set y2label "Ein/Aus"
+set y2range [0:0.7]
+
+#FileLog 4:Eisf.UVR1611\x3a:14:
+#FileLog 5:Eisf.UVR1611\x3a:14:
+#FileLog 6:Eisf.UVR1611\x3a:0.7:$fld[5]=~"0"?0.4:0.6
+#FileLog 7:Eisf.UVR1611\x3a:0.2:$fld[6]=~"0"?0.1:0.3
+
+plot "<IN>" using 1:2 axes x1y1 title 'Temp Kollektor' ls l0 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y1 title 'Temp Eisspeicher' ls l2 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y2 title 'Pumpe Solar' ls l4 lw 1.5 with steps,\
+     "<IN>" using 1:2 axes x1y2 title 'Ventil Solar' ls l1 lw 1.5 with steps

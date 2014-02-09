@@ -1,0 +1,73 @@
+#! /bin/sh  
+# Copyright (c) 2012 Wolfram Plettscher
+# All rights reserved
+#
+# Author: Wolfram Plettscher, 2012
+#
+# /etc/init.d/wp_tinkerforge
+#
+### BEGIN INIT INFO
+# Provides:          wp_tinkerforge
+# Required-Start:
+# Required-Stop:
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: Tinkerforge support for FHEM
+# Description:       due to bug in drivers (python?) copy to other USB-device
+#                    during start it also reconfigures /dev/ttyACM0 (/dev/ttyUSBx) to rwrwrw rights
+#                    (hardcoded tty for busware CUL device / Watteco V6 Border Router)
+#                    Last maintained for SuSE 12.2
+#
+# Installation:
+# - copy this file to /etc/init.d
+# - chmod 744 /etc/init.d/wp_tinkerforge
+# - ln -s /etc/init.d/wp_tinkerforge /sbin/wp_tinkerforge
+# - enable and edit in YAST system services
+### END INIT INFO
+
+case "$1" in
+  start)
+    echo "Start $0"
+    
+    ln -s /dev/ttyACM0 /dev/ttyS8
+    ln -s /dev/ttyACM0 /dev/ttyUSB2
+    chmod 777 /dev/ttyACM0
+    chmod 777 /dev/ttyS8
+    chmod 777 /dev/ttyUSB2
+    sleep 2
+
+    ### Tinkerforge IO-16 support
+#   cd /home/wopl/FHEM_IO16b/brickd/src/brickd
+#   python brickd_linux.py
+    cd /usr/share/fhem/cfg/tinkerforge/brickd/src/brickd
+    python brickd_linux.py
+    ;;
+
+  stop)
+    echo "Stop $0"
+    /usr/bin/pkill python
+    ;;
+
+  restart)
+    echo "Restart $0"
+#    /usr/bin/fhem.pl 7072 shutdown
+#    /usr/bin/pkill tunslip6
+#    /usr/bin/tunslip6 aaaa::1/72 -s /dev/ttyUSB0 &
+#    cp /usr/share/fhem/FHEM/fhem.cfg /etc/fhem.cfg
+#    /usr/bin/fhem.pl /etc/fhem.cfg
+    ;;
+
+  status)
+    cnt=`ps -ef | grep "python brickd_linux.py" | grep -v grep | wc -l`
+    if [ "$cnt" -eq "0" ] ; then
+      echo "$0 is not running"
+    else
+      echo "$0 is running"
+    fi
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+  exit 1
+esac
+exit 0

@@ -1,0 +1,28 @@
+### test
+
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title '<TL>'
+set y2label "currentPower (W)"
+set ylabel "totalEnergyDay (kWh)"
+
+#FileLog 12:yello1:0:
+#FileLog 10:yello1:0:
+#FileLog 8:yello1:0:
+#FileLog 6:yello1:0:
+#FileLog 4:yello1:0:
+
+plot \
+ "< awk '/yello1:/ {print $1, $12}' <IN>"\
+      using 1:2 ls l9 axes x1y1 title 'day' with filledcurve,\
+ "< awk '/totalEnergyDay:/ {print $1, $10}' <IN>",\
+      using 1:2 ls l2 axes x1y2 title 'average' with histeps,\
+ "< awk '/totalEnergyDay:/ {print $1, $8}' <IN>",\
+      using 1:2 ls l3 axes x1y2 title 'last' with histeps,\
+ "< awk '/totalEnergyDay:/ {print $1, $6}' <IN>",\
+      using 1:2 ls l1 axes x1y2 title 'max' with histeps,\
+ "< awk '/totalEnergyDay:/ {print $1, $4}' <IN>",\
+      using 1:2 ls l0fill axes x1y2 title 'min' with histeps

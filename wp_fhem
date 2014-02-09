@@ -1,0 +1,94 @@
+#! /bin/sh  
+# Copyright (c) 2013 Wolfram Plettscher
+# All rights reserved
+#
+# Author: Wolfram Plettscher, 2013
+#
+# /etc/init.d/wp_fhem
+#
+### BEGIN INIT INFO
+# Provides:          wp_fhem
+# Required-Start: 
+# Required-Stop:
+# Should-Start:      wp_tinkerforge
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: starts FHEM house automation server
+# Description:       during start it also reconfigures /dev/ttyACM0 (/dev/ttyUSBx) to rwrwrw rights
+#                    (hardcoded tty for busware CUL device / Watteco V6 Border Router)
+#                    Last maintained for SuSE 11.4, 12.1, 12.3
+#
+# Installation:
+# - copy this file to /etc/init.d
+# - be sure, fileformat is unix: "set fileformat=unix"
+# - chmod 744 /etc/init.d/wp_fhem
+# - ln -s /etc/init.d/wp_fhem /sbin/wp_fhem
+# - enable and edit in YAST system services
+### END INIT INFO
+
+case "$1" in
+  start)
+    echo "Start $0"
+#   chmod 666 /dev/ttyUSB0
+#   chmod 666 /dev/ttyUSB1
+
+    ### CUL only works with /dev/ttyS8 or /dev/ttyUSB2
+    ### due to a bug in OS
+#   ln -s /dev/ttyACM0 /dev/ttyS8
+#   ln -s /dev/ttyACM0 /dev/ttyUSB2
+#   chmod 777 /dev/ttyACM0
+#   chmod 777 /dev/ttyS8
+#   chmod 777 /dev/ttyUSB2
+    
+    ### Watteco V6 support
+#   /usr/bin/pkill tunslip6
+#   /usr/bin/tunslip6 aaaa::1/72 -s /dev/ttyUSB0 &
+
+    ### prepare to start fhem
+    cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
+    cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
+    cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
+    /usr/bin/fhem.pl /etc/fhem/fhem_main.cfg
+    sleep 5
+
+    ### start Tinkerforge IO16 (after Tinkerforge service is running)
+    cd /home/wopl/FHEM_IO16
+    /home/wopl/FHEM_IO16/tf_fenster &
+    ;;
+
+  stop)
+    echo "Stop $0"
+    /usr/bin/fhem.pl 7072 shutdown
+    /usr/bin/pkill tf_fenster
+#   /usr/bin/pkill tunslip6
+    ;;
+
+  restart)
+    echo "Restart $0"
+    /usr/bin/fhem.pl 7072 shutdown
+    /usr/bin/pkill tf_fenster
+#   /usr/bin/pkill tunslip6
+    ### now do restart everything
+#   /usr/bin/tunslip6 aaaa::1/72 -s /dev/ttyUSB0 &
+    cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
+    cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
+    cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
+    /usr/bin/fhem.pl /etc/fhem/fhem_main.cfg
+    sleep 5
+    cd /home/wopl/FHEM_IO16
+    /home/wopl/FHEM_IO16/tf_fenster &
+    ;;
+
+  status)
+    cnt=`ps -ef | grep "fhem.pl" | grep -v grep | wc -l`
+    if [ "$cnt" -eq "0" ] ; then
+      echo "$0 is not running"
+    else
+      echo "$0 is running"
+    fi
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+  exit 1
+esac
+exit 0
