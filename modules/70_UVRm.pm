@@ -109,7 +109,7 @@ sub UVRm_RetrieveData($)
         ### convert decimal comma to decimal point
         $l2 =~ s/,/./g;
 
-        Log 3, "UVRm line: $l2";
+#        Log 3, "UVRm line: $l2";
 
         ### we now got a single line only containing the header and two values
         my ($v1, $v2) = split ":",$l2;
@@ -200,7 +200,7 @@ sub UVRm_FormatData($)
     }
 
   ### protocol all lines for debugging purpose
-  Log 3, "UVRm Format e: $text";
+#  Log 3, "UVRm Format e: $text";
 
   return $text;
 }  #end sub

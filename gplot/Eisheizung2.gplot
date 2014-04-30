@@ -1,0 +1,25 @@
+# Created by FHEMWEB, 2013-06-27 17:52:16
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title '<TL>'
+set ytics 
+set y2tics 
+set grid ytics
+set ylabel "Temperatur"
+set y2label ""
+set y2range
+
+#FileLog 4:Eisheizung.UVR1611\x3a::
+#FileLog 12:Eisheizung.UVR1611\x3a::
+#FileLog 13:Eisheizung.UVR1611\x3a::
+#FileLog 14:Eisheizung.UVR1611\x3a::
+#FileLog 15:Eisheizung.UVR1611\x3a::
+
+plot "<IN>" using 1:2 axes x1y1 title 'Kollektor' ls l0 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y1 title 'Eisspeicher vor Heizstab' ls l1 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y1 title 'Eisspeicher nach Heizstab' ls l2 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y1 title 'Solar-Rücklauf' ls l3 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y1 title 'Solar-Vorlauf' ls l4 lw 1.5 with lines

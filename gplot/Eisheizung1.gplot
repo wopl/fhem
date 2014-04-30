@@ -1,0 +1,21 @@
+# Created by FHEMWEB, 2013-06-27 17:52:16
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title '<TL>'
+set ytics 
+set y2tics "Aus" 0.1, "Ein" 0.3, "Aus" 0.4, "Ein" 0.6
+set grid ytics
+set ylabel "Temperatur"
+set y2label "Ein/Aus"
+set y2range [0:0.7]
+
+#FileLog 5:Eisheizung.UVR1611\x3a:14:
+#FileLog 17:Eisheizung.UVR1611\x3a:0.7:$fld[16]=~"0"?0.4:0.6
+#FileLog 18:Eisheizung.UVR1611\x3a:0.2:$fld[17]=~"0"?0.1:0.3
+
+plot "<IN>" using 1:2 axes x1y1 title 'Temp Eisspeicher' ls l0 lw 1.5 with lines,\
+     "<IN>" using 1:2 axes x1y2 title 'Verdichter (inv)' ls l2 lw 1.5 with steps,\
+     "<IN>" using 1:2 axes x1y2 title 'WP Sammelstörmeldung' ls l1 lw 1.5 with steps

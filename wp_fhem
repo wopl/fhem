@@ -1,8 +1,8 @@
 #! /bin/sh  
-# Copyright (c) 2013 Wolfram Plettscher
+# Copyright (c) 2014 Wolfram Plettscher
 # All rights reserved
 #
-# Author: Wolfram Plettscher, 2013
+# Author: Wolfram Plettscher, 2014
 #
 # /etc/init.d/wp_fhem
 #
@@ -48,7 +48,7 @@ case "$1" in
     cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
     cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
-    /usr/bin/fhem.pl /etc/fhem/fhem_main.cfg
+    /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
 
     ### start Tinkerforge IO16 (after Tinkerforge service is running)
@@ -58,14 +58,14 @@ case "$1" in
 
   stop)
     echo "Stop $0"
-    /usr/bin/fhem.pl 7072 shutdown
+    /usr/share/fhem/fhem.pl 7072 shutdown
     /usr/bin/pkill tf_fenster
 #   /usr/bin/pkill tunslip6
     ;;
 
   restart)
     echo "Restart $0"
-    /usr/bin/fhem.pl 7072 shutdown
+    /usr/share/fhem/fhem.pl 7072 shutdown
     /usr/bin/pkill tf_fenster
 #   /usr/bin/pkill tunslip6
     ### now do restart everything
@@ -73,7 +73,7 @@ case "$1" in
     cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
     cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
-    /usr/bin/fhem.pl /etc/fhem/fhem_main.cfg
+    /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
     cd /home/wopl/FHEM_IO16
     /home/wopl/FHEM_IO16/tf_fenster &

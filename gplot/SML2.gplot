@@ -1,0 +1,22 @@
+### test
+
+set terminal png transparent size <SIZE> crop
+set output '<OUT>.png'
+set xdata time
+set timefmt "%Y-%m-%d_%H:%M:%S"
+set xlabel " "
+set title '<TL>'
+set y2label "currentPower (W)"
+set ylabel "(kWh)"
+
+#FileLog 11:SML2:0:
+#FileLog 9:SML2:0:
+#FileLog 5:SML2:0:
+
+plot \
+ "< awk '/totalEnergyDay:/ {print $1, $11}' <IN>",\
+      using 1:2 ls l2 lw 1.5 axes x1y2 title 'Average' with histeps,\
+ "< awk '/totalEnergyDay:/ {print $1, $9}' <IN>",\
+      using 1:2 ls l0 lw 1.5 axes x1y2 title 'Current' with lines,\
+ "< awk '/totalEnergy:/ {print $1, $5}' <IN>",\
+      using 1:2 ls l1 lw 1.5 axes x1y1 title 'Total kWh' with histeps
