@@ -1,6 +1,6 @@
 /******************************************************************************
  ***                                                                        ***
- *** tf_fenster.c                            (C) Wolfram Plettscher 05.2014 ***
+ *** tf_fenster.c                            (C) Wolfram Plettscher 08.2013 ***
  ***                                                                        ***
  *** Interrupt driven messages to FHEM on windows/doors open/close          ***
  *** using Tinkerforge Master-Brick and IO-16 Bricklet                      ***
@@ -15,13 +15,11 @@
 
 #define HOST "172.22.1.5"
 #define PORT 4223
-#define CALL "/usr/share/fhem/fhem.pl"
 #define UID "7NE"      // UID of IO-16 Bricklet
-#define IOMASK_A    0x3f  // define pins on port A relevant for FHEM update
-#define FLOORMASK_A 0x3f  // define pins for floor consolidation
+#define IOMASK_A    0x7f  // define pins on port A relevant for FHEM update
+#define FLOORMASK_A 0x7f  // define pins for floor consolidation
 #define IOMASK_B    0xff  // define pins on port B relevant for FHEM update
-#define FLOORMASK_B 0x38  // define pins for floor consolidation (1st floor windows)
-#define FLOORMASK_C 0x07  // define pins for floor consolidation (roof windows)
+#define FLOORMASK_B 0x3f  // define pins for floor consolidation
 
 // Global Variables
 IO16 io;
@@ -37,8 +35,7 @@ IPConnection ipcon;
  ******************************************************************************/
 void notify_FHEM (char port, int pin, int status) {
 
-  char cmd[80] = "/usr/share/fhem/fhem.pl 7072 'set ";
-  //char cmd[80] = strcat (CALL, " 7072 'set ");
+  char cmd[80] = "fhem.pl 7072 'set ";
 
   // here we assign Tinkerforge IO-Pins to FHEM device names
   if (port == 'a') {
@@ -47,10 +44,9 @@ void notify_FHEM (char port, int pin, int status) {
       case 1: strcat (cmd, "Fenster_Gast"); break;
       case 2: strcat (cmd, "Fenster_Kueche_links"); break;
       case 3: strcat (cmd, "Fenster_Kueche_rechts"); break;
-      case 4: strcat (cmd, "Tuer_Essz"); break;
-      case 5: strcat (cmd, "Tuer_Wohnz"); break;
-      case 6: strcat (cmd, "Port_A6"); break;
-      case 7: strcat (cmd, "Port_A7"); break;
+      case 4: strcat (cmd, "Fenster_Essz"); break;
+      case 5: strcat (cmd, "Tuer_Essz"); break;
+      case 6: strcat (cmd, "Tuer_Wohnz"); break;
     }
   }
 
@@ -80,22 +76,9 @@ void notify_FHEM (char port, int pin, int status) {
 
 /******************************************************************************
  *                                                                            *
- * run_system_cmd                                                             *
- *                                                                            *
- ******************************************************************************/
-void run_system_cmd (char* mycmd) {
-
-  printf ("\n%s\n\n", mycmd);
-  system (mycmd);
-}
-
-
-/******************************************************************************
- *                                                                            *
  * notify_floor                                                               *
  *                                                                            *
  * similar to notify_FHEM, but now we aggregate on a floor level              *
- * in addition we set LEDs on status-display                                  *
  *                                                                            *
  ******************************************************************************/
 void notify_floor (char port, uint8_t value_mask) {
@@ -107,35 +90,27 @@ void notify_floor (char port, uint8_t value_mask) {
 
     // Filter only relevant pins and check if ALL are closed
     if ((value_mask & FLOORMASK_A) == 0) {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_EG off'");
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_03 led green'");
+      cmd = "fhem.pl 7072 'set _Fenster_EG off'";
     } else {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_EG on'");
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_03 led red'");
+      cmd = "fhem.pl 7072 'set _Fenster_EG on'";
     }
   }
 
   // Port B handles all windows/doors on first floor
   if (port == 'b') {
 
-    // Filter only relevant pins (1st floor) and check if ALL are closed
+    // Filter only relevant pins and check if ALL are closed
     if ((value_mask & FLOORMASK_B) == 0) {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_OG off'");
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_02 led green'");
+      cmd = "fhem.pl 7072 'set _Fenster_OG off'";
     } else {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_OG on'");
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_02 led red'");
-    }
-
-    // Filter only relevant pins (roof windows) and check if ALL are closed
-    if ((value_mask & FLOORMASK_C) == 0) {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_Dach off'");
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_01 led green'");
-    } else {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_Dach on'");
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_01 led red'");
+      cmd = "fhem.pl 7072 'set _Fenster_OG on'";
     }
   }
+
+  // run FHEM command to set status of device
+  printf ("\n%s\n\n", cmd);
+  system (cmd);
+  
 }
 
 
@@ -241,7 +216,7 @@ void *thread2 (void* zzz) {
     sleep (10);
   }
 
-  // now we reduce to once every 1 Minutes; endless loop
+  // now we reduce to once every 10 Minutes; endless loop
   while (1) {
 
     // read input ports from Tinkerforge IO-bricklet
@@ -251,7 +226,7 @@ void *thread2 (void* zzz) {
     err = io16_get_port (&io, 'b', &value_mask); 
     cb_interrupt ('b', IOMASK_B, value_mask, NULL);
 
-    sleep (60);
+    sleep (600);
   }
 }
 

@@ -10,7 +10,7 @@
 # Provides:          wp_fhem
 # Required-Start: 
 # Required-Stop:
-# Should-Start:      wp_tinkerforge
+#### Should-Start:      wp_tinkerforge
 # Default-Start:     3 5
 # Default-Stop:      0 1 2 6
 # Short-Description: starts FHEM house automation server
@@ -52,8 +52,9 @@ case "$1" in
     sleep 5
 
     ### start Tinkerforge IO16 (after Tinkerforge service is running)
-    cd /home/wopl/FHEM_IO16
-    /home/wopl/FHEM_IO16/tf_fenster &
+#    cd /home/wopl/FHEM_IO16
+#    /home/wopl/FHEM_IO16/tf_fenster &
+    /usr/share/fhem/cfg/tinkerforge/tf_fenster &
     ;;
 
   stop)
@@ -75,8 +76,9 @@ case "$1" in
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
     /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
-    cd /home/wopl/FHEM_IO16
-    /home/wopl/FHEM_IO16/tf_fenster &
+#    cd /home/wopl/FHEM_IO16
+#    /home/wopl/FHEM_IO16/tf_fenster &
+    /usr/share/fhem/cfg/tinkerforge/tf_fenster &
     ;;
 
   status)
