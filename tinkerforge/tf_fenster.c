@@ -226,8 +226,8 @@ void *thread2 (void* zzz) {
   int i, err;
   uint8_t value_mask=255;
 
-  // first 5 Minutes we will update FHEM every 10 seconds
-  for (i=0; i<12; i++) {
+  // first 5 Minutes we will update FHEM every 30 seconds
+  for (i=0; i<10; i++) {
 
     // read input ports from Tinkerforge IO-bricklet
     // update FHEM via cb_interrupt
@@ -238,10 +238,10 @@ void *thread2 (void* zzz) {
 // printf("PortB_err: %d\n", err);
     cb_interrupt ('b', IOMASK_B, value_mask, NULL);
 
-    sleep (10);
+    sleep (30);
   }
 
-  // now we reduce to once every 1 Minutes; endless loop
+  // now we reduce to once every 5 Minutes; endless loop
   while (1) {
 
     // read input ports from Tinkerforge IO-bricklet
@@ -251,7 +251,7 @@ void *thread2 (void* zzz) {
     err = io16_get_port (&io, 'b', &value_mask); 
     cb_interrupt ('b', IOMASK_B, value_mask, NULL);
 
-    sleep (60);
+    sleep (300);
   }
 }
 
