@@ -48,6 +48,7 @@ case "$1" in
     cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
     cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
+    cp /usr/share/fhem/cfg/Floorplan/fhem_images/*.png /usr/share/fhem/www/images/default
     /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
 
@@ -74,6 +75,7 @@ case "$1" in
     cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
     cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
+    cp /usr/share/fhem/cfg/Floorplan/fhem_images/*.png /usr/share/fhem/www/images/default
     /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
 #    cd /home/wopl/FHEM_IO16
