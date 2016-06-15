@@ -1,8 +1,8 @@
 #! /bin/sh  
-# Copyright (c) 2014 Wolfram Plettscher
+# Copyright (c) 2016 Wolfram Plettscher
 # All rights reserved
 #
-# Author: Wolfram Plettscher, 2014
+# Author: Wolfram Plettscher, 06.2016
 #
 # /etc/init.d/wp_fhem
 #
@@ -48,6 +48,8 @@ case "$1" in
     cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
     cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
+    cp /usr/share/fhem/cfg/Floorplan/fhem_images/*.png /usr/share/fhem/www/images/default
+    cp /usr/share/fhem/cfg/Floorplan/woplfloorplanstyle.css /usr/share/fhem/www/pgm2
     /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
 
@@ -74,6 +76,7 @@ case "$1" in
     cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
     cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
     cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
+    cp /usr/share/fhem/cfg/Floorplan/fhem_images/*.png /usr/share/fhem/www/images/default
     /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
     sleep 5
 #    cd /home/wopl/FHEM_IO16
