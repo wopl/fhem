@@ -45,12 +45,12 @@ case "$1" in
 #   /usr/bin/tunslip6 aaaa::1/72 -s /dev/ttyUSB0 &
 
     ### prepare to start fhem
-    cp /usr/share/fhem/cfg/fhem_*.cfg /etc/fhem
-    cp /usr/share/fhem/cfg/gplot/*.gplot /usr/share/fhem/www/gplot
-    cp /usr/share/fhem/cfg/modules/*.pm /usr/share/fhem/FHEM
-    cp /usr/share/fhem/cfg/Floorplan/fhem_images/*.png /usr/share/fhem/www/images/default
-    cp /usr/share/fhem/cfg/Floorplan/woplfloorplanstyle.css /usr/share/fhem/www/pgm2
-    /usr/share/fhem/fhem.pl /etc/fhem/fhem_main.cfg
+    cp /usr/share/fhem/fhem_*.cfg /opt/fhem
+    cp /usr/share/fhem/gplot/*.gplot /opt/fhem/www/gplot
+    cp /usr/share/fhem/modules/*.pm /opt/fhem/FHEM
+    cp /usr/share/fhem/Floorplan/fhem_images/*.png /opt/fhem/www/images/default
+    cp /usr/share/fhem/Floorplan/woplfloorplanstyle.css /opt/fhem/www/pgm2
+    /opt/fhem/fhem.pl /opt/fhem/fhem_main.cfg
     sleep 5
 
     ### start Tinkerforge IO16 (after Tinkerforge service is running)
