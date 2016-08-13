@@ -15,7 +15,7 @@
 
 #define HOST "172.22.1.5"
 #define PORT 4223
-#define CALL "/usr/share/fhem/fhem.pl"
+#define CALL "/opt/fhem/fhem.pl"
 #define UID "7NE"      // UID of IO-16 Bricklet
 #define IOMASK_A    0x3f  // define pins on port A relevant for FHEM update
 #define FLOORMASK_A 0x3f  // define pins for floor consolidation
@@ -37,7 +37,7 @@ IPConnection ipcon;
  ******************************************************************************/
 void notify_FHEM (char port, int pin, int status) {
 
-  char cmd[80] = "/usr/share/fhem/fhem.pl 7072 'set ";
+  char cmd[80] = "/opt/fhem/fhem.pl 7072 'set ";
   //char cmd[80] = strcat (CALL, " 7072 'set ");
 
   // here we assign Tinkerforge IO-Pins to FHEM device names
@@ -107,10 +107,10 @@ void notify_floor (char port, uint8_t value_mask) {
 
     // Filter only relevant pins and check if ALL are closed
     if ((value_mask & FLOORMASK_A) == 0) {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_EG off'");
+      run_system_cmd ("/opt/fhem/fhem.pl 7072 'set _Fenster_EG off'");
 //      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_03 led green'");
     } else {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_EG on'");
+      run_system_cmd ("/opt/fhem/fhem.pl 7072 'set _Fenster_EG on'");
 //      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_03 led red'");
     }
   }
@@ -120,19 +120,19 @@ void notify_floor (char port, uint8_t value_mask) {
 
     // Filter only relevant pins (1st floor) and check if ALL are closed
     if ((value_mask & FLOORMASK_B) == 0) {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_OG off'");
+      run_system_cmd ("/opt/fhem/fhem.pl 7072 'set _Fenster_OG off'");
 //      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_02 led green'");
     } else {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_OG on'");
+      run_system_cmd ("/opt/fhem/fhem.pl 7072 'set _Fenster_OG on'");
 //      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_02 led red'");
     }
 
     // Filter only relevant pins (roof windows) and check if ALL are closed
     if ((value_mask & FLOORMASK_C) == 0) {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_Dach off'");
+      run_system_cmd ("/opt/fhem/fhem.pl 7072 'set _Fenster_Dach off'");
 //      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_01 led green'");
     } else {
-      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set _Fenster_Dach on'");
+      run_system_cmd ("/opt/fhem/fhem.pl 7072 'set _Fenster_Dach on'");
 //      run_system_cmd ("/usr/share/fhem/fhem.pl 7072 'set hmStatus_Led_01 led red'");
     }
   }
